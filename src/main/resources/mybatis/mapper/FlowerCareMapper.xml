@@ -20,4 +20,19 @@
         VALUES
           (#{name}, #{img}, #{content}, #{createdTime}, #{updatedTime}, #{status})
     </insert>
+
+    <select id="getCare" resultMap="CareResultMap">
+        SELECT
+        id, name, img, content, created_time, updated_time, status
+        FROM flower_care
+        WHERE status = 1
+        limit 1
+    </select>
+
+    <select id="getCares" resultMap="CareResultMap">
+        SELECT
+        id, name, img, content, created_time, updated_time, status
+        FROM flower_care
+        WHERE status = 1
+    </select>
 </mapper>

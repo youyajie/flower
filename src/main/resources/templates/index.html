@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表页</title>
+</head>
+<body>
+    <table>
+        <th:block th:each="care : ${cares}">
+            <tr>
+                <td th:text="${care.name}"></td>
+                <td th:text="${care.content}"></td>
+            </tr>
+        </th:block>
+    </table>
+</body>
+</html>
