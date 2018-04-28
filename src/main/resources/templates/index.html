@@ -6,12 +6,11 @@
 </head>
 <body>
     <table>
-        <th:block th:each="care : ${cares}">
-            <tr>
-                <td th:text="${care.name}"></td>
-                <td th:text="${care.content}"></td>
-            </tr>
-        </th:block>
+        <tr th:each="care,iterationStatus  : ${cares}">
+            <td th:text="${iterationStatus.count}">1</td>
+            <td th:text="${care.name}">001</td>
+            <td th:text="${care.content}">Name</td>
+        </tr>
     </table>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.you.entity.FlowerCareEntity;
 import com.you.service.IFlowerCareService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * Created by yyj on 2018/4/26.
  */
-@RestController
+@Controller
 @RequestMapping("/care")
 public class FlowerCareController {
 
@@ -48,18 +49,19 @@ public class FlowerCareController {
     public String getCare(Map<String, Object> model) {
         String cares = "";
 
-        try {
-            List<FlowerCareEntity> entityList = flowerCare.getCares();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(out, entityList);
-            byte[] data = out.toByteArray();
-            cares = new String(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<FlowerCareEntity> entityList = flowerCare.getCares();
+//        try {
+//
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.writeValue(out, entityList);
+//            byte[] data = out.toByteArray();
+//            cares = new String(data);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        model.put("cares", cares);
+        model.put("cares", entityList);
 
         return "index";
     }
