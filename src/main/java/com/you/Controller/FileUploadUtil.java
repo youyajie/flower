@@ -1,5 +1,6 @@
 package com.you.Controller;
 
+import com.alibaba.fastjson.JSON;
 import com.you.entity.FileUploadResponse;
 import com.you.utils.DateUtil;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,14 +25,13 @@ public class FileUploadUtil {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public List<FileUploadResponse> upload(@RequestParam("file") MultipartFile[] files, HttpServletRequest request) {
+    public String upload(@RequestParam("file") MultipartFile[] files, HttpServletRequest request) {
         List<FileUploadResponse> list = new ArrayList<>();
 
         String location = DateUtil.format(LocalDate.now(), "yyyy-MM-dd") + "/";
         File targetFile = new File(BASE_FILE + location);
         if(!targetFile.exists()) {
-            boolean result = targetFile.mkdirs();
-            System.out.println("result:" + result);
+            targetFile.mkdirs();
         }
 
         for (MultipartFile file : files) {
@@ -42,7 +40,6 @@ public class FileUploadUtil {
             String fileName = file.getOriginalFilename();
             try {
                 Path path = Paths.get(BASE_FILE + location, fileName);
-                System.out.println("path:" + path.toString());
                 Files.copy(file.getInputStream(), path,
                         StandardCopyOption.REPLACE_EXISTING);
                 rs.setContentType(contentType);
@@ -56,7 +53,7 @@ public class FileUploadUtil {
             }
             list.add(rs);
         }
-        return list;
+        return JSON.toJSONString(list);
     }
 
 }

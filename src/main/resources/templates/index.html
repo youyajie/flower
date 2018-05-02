@@ -68,7 +68,7 @@
             var files = event.target.files;
             var formData = new FormData();
             var request = new XMLHttpRequest();
-
+            request.responseType = "json";
             for (var i = 0, len = files.length; i < len; i++) {
                 formData.append('file', files[i]);
             }
@@ -77,10 +77,10 @@
             request.send(formData);
 
             request.onload = function(event) {
-                var imgs = event.target.response;
-                for 
-
-                console.log(event.target.response)
+                var result = JSON.parse(request.response);
+                for(var index in result){
+                    console.log(result[index].fileName);  //取json中的值
+                }
             }
         }
 
