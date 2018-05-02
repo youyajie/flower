@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Controller
 public class FileUploadUtil {
-    private static final String BASE_FILE = "/data/img/";
+    private static final String BASE_FILE = "/Users/yyj/data/img/";
 
     @RequestMapping("/upload")
     @ResponseBody
@@ -32,7 +32,8 @@ public class FileUploadUtil {
         String location = DateUtil.format(LocalDate.now(), "yyyy-MM-dd") + "/";
         File targetFile = new File(BASE_FILE + location);
         if(!targetFile.exists()) {
-            targetFile.mkdirs();
+            boolean result = targetFile.mkdirs();
+            System.out.println("result:" + result);
         }
 
         for (MultipartFile file : files) {
@@ -40,7 +41,9 @@ public class FileUploadUtil {
             String contentType = file.getContentType();
             String fileName = file.getOriginalFilename();
             try {
-                Files.copy(file.getInputStream(), Paths.get(BASE_FILE + location, fileName),
+                Path path = Paths.get(BASE_FILE + location, fileName);
+                System.out.println("path:" + path.toString());
+                Files.copy(file.getInputStream(), path,
                         StandardCopyOption.REPLACE_EXISTING);
                 rs.setContentType(contentType);
                 rs.setFileName(fileName);

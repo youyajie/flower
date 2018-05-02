@@ -1,16 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>列表页</title>
+
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
-    <table>
-        <tr th:each="care,iterationStatus  : ${cares}">
-            <td th:text="${iterationStatus.count}">1</td>
-            <td th:text="${care.name}">001</td>
-            <td th:text="${care.content}">Name</td>
-        </tr>
-    </table>
+    <div class="container">
+        <div class="header clearfix">
+            <h3 class="text-muted">flower配置中心</h3>
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-primary" style="margin-left: 90%"
+                    data-toggle="modal" data-target="#addCare">新增</button>
+        </div>
+        <table class="table table-striped" style="margin-top: 20px">
+            <tr th:each="care,iterationStatus  : ${cares}">
+                <td th:text="${iterationStatus.count}">1</td>
+                <td th:text="${care.name}">001</td>
+                <td th:text="${care.content}">Name</td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="modal fade" id="addCare" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增养护说明</h4>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">鲜花名称</label>
+                            <input type="text" class="form-control" id="name" placeholder="玫瑰">
+                        </div>
+                        <div class="form-group">
+                            <label for="content">养护说明</label>
+                            <textarea class="form-control" rows="3" id="content" placeholder="勤换水"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="img">说明图片</label>
+                            <input type="file" id="img" accept="image/*" multiple>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+        function uploadCareImg(event) {
+            var files = event.target.files;
+            var formData = new FormData();
+            var request = new XMLHttpRequest();
+
+            for (var i = 0, len = files.length; i < len; i++) {
+                formData.append('file', files[i]);
+            }
+
+            request.open('POST', '/upload');
+            request.send(formData);
+
+            request.onload = function(event) {
+                var imgs = event.target.response;
+                for 
+
+                console.log(event.target.response)
+            }
+        }
+
+        document.getElementById("img").addEventListener("change", uploadCareImg, false);
+    </script>
 </body>
 </html>
