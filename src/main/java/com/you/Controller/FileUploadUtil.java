@@ -4,13 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.you.entity.FileUploadResponse;
 import com.you.utils.DateUtil;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +27,7 @@ import java.util.List;
  */
 @Controller
 public class FileUploadUtil {
-    private static final String BASE_FILE = "/Users/yyj/data/img/";
+    public static final String BASE_FILE = "/Users/yyj/data/img/";
 
     @RequestMapping("/upload")
     @ResponseBody
@@ -54,6 +60,20 @@ public class FileUploadUtil {
             list.add(rs);
         }
         return JSON.toJSONString(list);
+    }
+
+    @RequestMapping(value = "/img", method = RequestMethod.GET,
+            produces = MediaType.IMAGE_PNG_VALUE)
+    public void getImage(HttpServletResponse response, @RequestParam("name") String name)
+            throws IOException {
+        if(StringUtils.isEmpty(name)) {
+            return;
+        }
+
+        InputStream imgStream = new FileInputStream(BASE_FILE + name);
+
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        StreamUtils.copy(imgStream, response.getOutputStream());
     }
 
 }

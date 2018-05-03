@@ -1,5 +1,7 @@
 package com.you.entity;
 
+import java.util.List;
+
 /**
  * Created by yyj on 2018/4/26.
  */
@@ -7,6 +9,7 @@ public class FlowerCareEntity {
     private Integer id;
     private String name;
     private String img;
+    private List<String> imgList;
     private String content;
     private Long createdTime;
     private Long updatedTime;
@@ -66,5 +69,13 @@ public class FlowerCareEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<String> getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(List<String> imgList) {
+        this.imgList = imgList;
     }
 }

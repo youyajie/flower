@@ -7,6 +7,7 @@
     <title>列表页</title>
 
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/care.css" rel="stylesheet">
 
 </head>
 <body>
@@ -24,6 +25,11 @@
                 <td th:text="${iterationStatus.count}">1</td>
                 <td th:text="${care.name}">001</td>
                 <td th:text="${care.content}">Name</td>
+                <td>
+                    <div style="display: inline-block;">
+                        <img th:each="img,iterationStatus : ${care.imgList}" th:src="@{${'/img?name=' + img}}"/>
+                    </div>
+                </td>
             </tr>
         </table>
 
@@ -36,19 +42,21 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">新增养护说明</h4>
                 </div>
-                <form>
+
+                <form action="/care/add" method="post">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">鲜花名称</label>
-                            <input type="text" class="form-control" id="name" placeholder="玫瑰">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="玫瑰">
                         </div>
                         <div class="form-group">
                             <label for="content">养护说明</label>
-                            <textarea class="form-control" rows="3" id="content" placeholder="勤换水"></textarea>
+                            <textarea class="form-control" rows="3" id="content" name="content" placeholder="勤换水"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="img">说明图片</label>
-                            <input type="file" id="img" accept="image/*" multiple>
+                            <label for="imgList">说明图片</label>
+                            <input type="file" id="imgFile" accept="image/*" multiple="multiple">
+                            <input type="text" id="imgList" name="imgList" hidden/>
                         </div>
                     </div>
 
@@ -78,13 +86,16 @@
 
             request.onload = function(event) {
                 var result = JSON.parse(request.response);
+                var imgUrls = [];
                 for(var index in result){
-                    console.log(result[index].fileName);  //取json中的值
+                    imgUrls.push(result[index].url)
                 }
+                $("#imgList").val(imgUrls);
             }
         }
 
-        document.getElementById("img").addEventListener("change", uploadCareImg, false);
+        document.getElementById("imgFile").addEventListener("change", uploadCareImg, false);
+
     </script>
 </body>
 </html>
