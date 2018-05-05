@@ -1,9 +1,12 @@
 package com.you.service;
 
+import com.alibaba.fastjson.JSON;
 import com.you.entity.FlowerCareEntity;
 import com.you.mapper.FlowerCareMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -26,11 +29,36 @@ public class FlowerCareServiceImpl implements IFlowerCareService {
 
     @Override
     public FlowerCareEntity getCare() {
-        return flowerCareMapper.getCare();
+        FlowerCareEntity entity = flowerCareMapper.getCare();
+        convertCare(entity);
+        return entity;
     }
 
     @Override
     public List<FlowerCareEntity> getCares() {
-        return flowerCareMapper.getCares();
+        List<FlowerCareEntity> entities = flowerCareMapper.getCares();
+        convertCares(entities);
+        return entities;
+    }
+
+    private void convertCares(List<FlowerCareEntity> entities) {
+        if(CollectionUtils.isEmpty(entities)) {
+            return;
+        }
+
+        for (FlowerCareEntity entity : entities) {
+            convertCare(entity);
+        }
+    }
+
+    private void convertCare(FlowerCareEntity entity) {
+        if(entity == null) {
+            return;
+        }
+
+        if(!StringUtils.isEmpty(entity.getImg())) {
+            List<String> imgList = JSON.parseArray(entity.getImg(), String.class);
+            entity.setImgList(imgList);
+        }
     }
 }
