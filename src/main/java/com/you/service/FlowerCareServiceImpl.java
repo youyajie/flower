@@ -28,8 +28,8 @@ public class FlowerCareServiceImpl implements IFlowerCareService {
     }
 
     @Override
-    public FlowerCareEntity getCare() {
-        FlowerCareEntity entity = flowerCareMapper.getCare();
+    public FlowerCareEntity getCare(Integer id) {
+        FlowerCareEntity entity = flowerCareMapper.getCare(id);
         convertCare(entity);
         return entity;
     }

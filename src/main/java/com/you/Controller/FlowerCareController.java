@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -37,8 +38,8 @@ public class FlowerCareController {
 
     @RequestMapping(value = "/wx/detail", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public FlowerCareEntity getWXCare() {
-        return flowerCare.getCare();
+    public FlowerCareEntity getWXCare(@RequestParam("id") Integer id) {
+        return flowerCare.getCare(id);
     }
 
     @RequestMapping(value = "/wx/list", produces = "application/json; charset=UTF-8")

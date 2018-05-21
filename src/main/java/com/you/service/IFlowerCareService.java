@@ -10,7 +10,7 @@ import java.util.List;
 public interface IFlowerCareService {
     Integer insertCare(FlowerCareEntity entity);
 
-    FlowerCareEntity getCare();
+    FlowerCareEntity getCare(Integer id);
 
     List<FlowerCareEntity> getCares();
 }
