@@ -8,9 +8,11 @@ import java.util.List;
 public class FlowerCareEntity {
     private Integer id;
     private String name;
+    private String thumbnail;
     private String img;
     private List<String> imgList;
     private String content;
+    private String author;
     private Long createdTime;
     private Long updatedTime;
     private Integer status;
@@ -77,5 +79,21 @@ public class FlowerCareEntity {
 
     public void setImgList(List<String> imgList) {
         this.imgList = imgList;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

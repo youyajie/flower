@@ -6,8 +6,10 @@
    <resultMap id="CareResultMap" type="com.you.entity.FlowerCareEntity">
        <id column="id" property="id" />
        <result column="name" property="name" />
+       <result column="thumbnail" property="thumbnail" />
        <result column="img" property="img" />
        <result column="content" property="content" />
+       <result column="author" property="author" />
        <result column="created_time" property="createdTime" />
        <result column="updated_time" property="updatedTime" />
        <result column="status" property="status" />
@@ -16,14 +18,14 @@
     <insert id="insertCare" parameterType="com.you.entity.FlowerCareEntity">
         INSERT INTO
           flower_care
-          (name, img, content, created_time, updated_time, status)
+          (name, thumbnail, img, content, author, created_time, updated_time, status)
         VALUES
-          (#{name}, #{img}, #{content}, #{createdTime}, #{updatedTime}, #{status})
+          (#{name}, #{thumbnail}, #{img}, #{content}, #{author}, #{createdTime}, #{updatedTime}, #{status})
     </insert>
 
     <select id="getCare" resultMap="CareResultMap">
         SELECT
-        id, name, img, content, created_time, updated_time, status
+        id, name, thumbnail, img, content, author, created_time, updated_time, status
         FROM flower_care
         WHERE status = 1
         limit 1
@@ -31,7 +33,7 @@
 
     <select id="getCares" resultMap="CareResultMap">
         SELECT
-        id, name, img, content, created_time, updated_time, status
+        id, name, thumbnail, img, content, author, created_time, updated_time, status
         FROM flower_care
         WHERE status = 1
     </select>

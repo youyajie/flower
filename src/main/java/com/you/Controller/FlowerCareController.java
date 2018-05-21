@@ -35,10 +35,17 @@ public class FlowerCareController {
         return "redirect:/care/list";
     }
 
-    @RequestMapping(value = "/wx/list", produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/wx/detail", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public FlowerCareEntity getWXCare() {
         return flowerCare.getCare();
+    }
+
+    @RequestMapping(value = "/wx/list", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<FlowerCareEntity> getWXCares() {
+
+        return flowerCare.getCares();
     }
 
     @RequestMapping(value = "/list")

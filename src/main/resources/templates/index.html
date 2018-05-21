@@ -54,9 +54,18 @@
                             <textarea class="form-control" rows="3" id="content" name="content" placeholder="勤换水"></textarea>
                         </div>
                         <div class="form-group">
+                            <label for="thumbnailFile">缩略图</label>
+                            <input type="file" id="thumbnailFile" accept="image/*">
+                            <input type="text" id="thumbnail" name="thumbnail" hidden />
+                        </div>
+                        <div class="form-group">
                             <label for="imgList">说明图片</label>
                             <input type="file" id="imgFile" accept="image/*" multiple="multiple">
                             <input type="text" id="imgList" name="imgList" hidden/>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">作者</label>
+                            <input type="text" class="form-control" name="author" id="author"/>
                         </div>
                     </div>
 
@@ -95,6 +104,26 @@
         }
 
         document.getElementById("imgFile").addEventListener("change", uploadCareImg, false);
+
+        function uploadThumbnail(event) {
+            var file = event.target.files;
+            var formData = new FormData();
+            var request = new XMLHttpRequest();
+            request.responseType = "json";
+            for (var i = 0, len = file.length; i < len; i++) {
+                formData.append('file', file[i]);
+            }
+
+            request.open('POST', '/upload');
+            request.send(formData);
+
+            request.onload = function (event) {
+                var result = JSON.parse(request.response);
+                $("#thumbnail").val(result[0].url);
+            }
+        }
+
+        document.getElementById("thumbnailFile").addEventListener("change", uploadThumbnail, false);
 
     </script>
 </body>
