@@ -61,4 +61,13 @@ public class FlowerCareServiceImpl implements IFlowerCareService {
             entity.setImgList(imgList);
         }
     }
+
+    @Override
+    public void deleteCare(Integer id) {
+        if(id == null) {
+            return;
+        }
+
+        flowerCareMapper.deleteCare(id);
+    }
 }

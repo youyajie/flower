@@ -13,4 +13,6 @@ public interface FlowerCareMapper {
     FlowerCareEntity getCare(Integer id);
 
     List<FlowerCareEntity> getCares();
+
+    void deleteCare(Integer id);
 }

@@ -31,7 +31,10 @@
         <if test="_parameter != null">
             and id = #{id}
         </if>
-        limit 1
+        <if test="_parameter == null">
+            ORDER BY rand()
+            limit 1
+        </if>
     </select>
 
     <select id="getCares" resultMap="CareResultMap">
@@ -40,4 +43,16 @@
         FROM flower_care
         WHERE status = 1
     </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(*)
+        from flower_care
+        WHERE status = 1
+    </select>
+    
+    <update id="deleteCare" parameterType="Integer">
+        UPDATE flower_care
+        SET status = 0
+        WHERE id = #{id}
+    </update>
 </mapper>

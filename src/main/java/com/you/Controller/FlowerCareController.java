@@ -50,11 +50,7 @@ public class FlowerCareController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addCare(FlowerCareEntity entity, HttpSession session) {
-        String username = session.getAttribute("username") != null ?
-                session.getAttribute("username").toString() : "";
-        String password = session.getAttribute("password") != null ?
-                session.getAttribute("password").toString() : "";
-        if(!username.equals(this.username) || !password.equals(this.password)) {
+        if(checkSession(session)) {
             return "redirect:/care/login";
         }
 
@@ -83,11 +79,7 @@ public class FlowerCareController {
 
     @RequestMapping(value = "/list")
     public String getCare(Map<String, Object> model, HttpSession session) {
-        String username = session.getAttribute("username") != null ?
-                session.getAttribute("username").toString() : "";
-        String password = session.getAttribute("password") != null ?
-                session.getAttribute("password").toString() : "";
-        if(!username.equals(this.username) || !password.equals(this.password)) {
+        if(checkSession(session)) {
             return "redirect:/care/login";
         }
 
@@ -97,4 +89,25 @@ public class FlowerCareController {
         return "index";
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json; charset=UTF-8")
+    public String deleteCare(@PathVariable Integer id, HttpSession session) {
+        if(checkSession(session)) {
+            return "false";
+        }
+
+        flowerCare.deleteCare(id);
+        return "true";
+    }
+
+    private Boolean checkSession(HttpSession session) {
+        String username = session.getAttribute("username") != null ?
+                session.getAttribute("username").toString() : "";
+        String password = session.getAttribute("password") != null ?
+                session.getAttribute("password").toString() : "";
+        if(!username.equals(this.username) || !password.equals(this.password)) {
+            return false;
+        }
+
+        return true;
+    }
 }

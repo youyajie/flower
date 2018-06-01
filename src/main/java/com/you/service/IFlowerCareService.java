@@ -13,4 +13,6 @@ public interface IFlowerCareService {
     FlowerCareEntity getCare(Integer id);
 
     List<FlowerCareEntity> getCares();
+
+    void deleteCare(Integer id);
 }

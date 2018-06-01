@@ -21,14 +21,27 @@
                     data-toggle="modal" data-target="#addCare">新增</button>
         </div>
         <table class="table table-striped" style="margin-top: 20px">
+            <tr><td style="width: 2%;">id</td><td style="width: 8%;">名称</td>
+                <td style="width: 25%;">养护说明</td><td style="width: 4%;">作者</td>
+                <td style="width: 10%;">缩略图</td><td style="width: 41%;">图片</td>
+                <td style="width: 10%">操作</td>
+            </tr>
             <tr th:each="care,iterationStatus  : ${cares}">
-                <td th:text="${iterationStatus.count}">1</td>
-                <td th:text="${care.name}">001</td>
-                <td th:text="${care.content}">Name</td>
+                <td th:text="${care.id}">1</td>
+                <td th:text="${care.name}">名称</td>
+                <td th:text="${care.content}">养护</td>
+                <td th:text="${care.author}">作者</td>
+                <td>
+                    <img th:src="(${care.thumbnail} or ) ? @{${'/img?name=' + care.thumbnail}} : '/img/nopic.jpeg'"/>
+                </td>
                 <td>
                     <div style="display: inline-block;">
                         <img th:each="img,iterationStatus : ${care.imgList}" th:src="@{${'/img?name=' + img}}"/>
                     </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" th:value="${care.id}"
+                            data-toggle="modal" data-target="#delete-modal">删除</button>
                 </td>
             </tr>
         </table>
@@ -77,6 +90,25 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade " id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">操作确认</h4>
+                </div>
+                <div class="modal-body">
+                    确定要删除吗?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="modal-del-btn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
 
@@ -122,9 +154,28 @@
                 $("#thumbnail").val(result[0].url);
             }
         }
-
+8
         document.getElementById("thumbnailFile").addEventListener("change", uploadThumbnail, false);
 
+        //删除模态框部分
+        $('#delete-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            button.val()
+            var modal = $(this)
+            modal.find('#modal-del-btn').val(button.val())
+        })
+
+        $('#modal-del-btn').click(function () {
+            console.log('---btn click:'+$(this).val())
+            $.ajax({
+                url : '/care/' + $(this).val(),
+                type : 'DELETE',
+                async : false,
+                success : function (result) {
+                    console.log('delete result---')
+                }
+            })
+        })
     </script>
 </body>
 </html>
