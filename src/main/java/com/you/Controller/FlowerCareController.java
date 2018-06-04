@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,13 +91,19 @@ public class FlowerCareController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json; charset=UTF-8")
+    @ResponseBody
     public String deleteCare(@PathVariable Integer id, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+
         if(checkSession(session)) {
-            return "false";
+            result.put("success", false);
+            return JSON.toJSONString(result);
         }
 
         flowerCare.deleteCare(id);
-        return "true";
+
+        result.put("success", true);
+        return JSON.toJSONString(result);
     }
 
     private Boolean checkSession(HttpSession session) {

@@ -1,13 +1,18 @@
 package com.you.service;
 
 import com.alibaba.fastjson.JSON;
+import com.you.Controller.FileUploadUtil;
 import com.you.entity.FlowerCareEntity;
 import com.you.mapper.FlowerCareMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +20,7 @@ import java.util.List;
  */
 @Service
 public class FlowerCareServiceImpl implements IFlowerCareService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private FlowerCareMapper flowerCareMapper;
@@ -60,6 +66,9 @@ public class FlowerCareServiceImpl implements IFlowerCareService {
             List<String> imgList = JSON.parseArray(entity.getImg(), String.class);
             entity.setImgList(imgList);
         }
+        if(StringUtils.isEmpty(entity.getThumbnail())) {
+            entity.setThumbnail(null);
+        }
     }
 
     @Override
@@ -68,6 +77,31 @@ public class FlowerCareServiceImpl implements IFlowerCareService {
             return;
         }
 
+        FlowerCareEntity care = getCare(id);
+        if(care == null) {
+            return;
+        }
+
+        //上传图片标记删除
+        List<String> imgs = new ArrayList<>();
+        if(!StringUtils.isEmpty(care.getThumbnail())) {
+            imgs.add(care.getThumbnail());
+        }
+        if(!CollectionUtils.isEmpty(care.getImgList())) {
+            imgs.addAll(care.getImgList());
+        }
+        if(!CollectionUtils.isEmpty(imgs)) {
+            for(String imgFile : imgs) {
+                File file = new File(FileUploadUtil.BASE_FILE + imgFile);
+                if(file.exists()) {
+                    imgFile = imgFile.substring(0, imgFile.lastIndexOf(".")) + "_removed" +
+                    imgFile.substring(imgFile.lastIndexOf("."), imgFile.length());
+                    file.renameTo(new File(FileUploadUtil.BASE_FILE + imgFile));
+                }
+            }
+        }
+
         flowerCareMapper.deleteCare(id);
     }
+
 }

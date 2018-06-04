@@ -32,7 +32,7 @@
                 <td th:text="${care.content}">养护</td>
                 <td th:text="${care.author}">作者</td>
                 <td>
-                    <img th:src="(${care.thumbnail} or ) ? @{${'/img?name=' + care.thumbnail}} : '/img/nopic.jpeg'"/>
+                    <img th:src="${care.thumbnail} ? @{${'/img?name=' + care.thumbnail}} : '/img/nopic.jpeg'"/>
                 </td>
                 <td>
                     <div style="display: inline-block;">
@@ -166,13 +166,20 @@
         })
 
         $('#modal-del-btn').click(function () {
-            console.log('---btn click:'+$(this).val())
             $.ajax({
                 url : '/care/' + $(this).val(),
                 type : 'DELETE',
+                dataType : 'json',
                 async : false,
                 success : function (result) {
-                    console.log('delete result---')
+                    var obj = $.parseJSON(result)
+                    if(obj.success) {
+                        alert("删除成功");
+                    } else {
+                        alert("删除失败");
+                    }
+                    $('#delete-modal').modal('hide')
+                    location.reload()
                 }
             })
         })
